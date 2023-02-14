@@ -1,0 +1,20 @@
+/* 默认内间距、外间距 */
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body,
+html {
+    font-family: '微软雅黑';
+}
+
+/* 清除a标签下划线 */
+a {
+    color: #666;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #2fa7b9;
+}
