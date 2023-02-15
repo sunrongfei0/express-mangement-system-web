@@ -43,7 +43,7 @@
       <el-table element-loading-text="数据加载中..." v-loading="loading" :data="tableData"
                 style="width: 100%;text-align:center;" :cell-style="{textAlign:'center'}"
                 :row-class-name="rowClassName"
-                :header-cell-style="{fontSize:'15px',background:'#148557',color:'white',textAlign:'textAlign'}">
+                :header-cell-style="{fontSize:'15px',background:'#148557',color:'white',textAlign:'center'}">
         <el-table-column label="序号" width="100" type="index" :index="Nindex"/>
         <el-table-column label="用户名称">
           <template #default="scope">
@@ -87,7 +87,7 @@
         <el-table-column label="创建时间">
           <template #default="scope">
             <el-tooltip :content="scope.row.createTime" placement="top" effect="light">
-              <span class="highlight">{{ scope.row.createTime }}</span>
+              <span class="highlight">{{ formatTime(scope.row.createTime, 'yyyy-MM-dd') }}</span>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -120,6 +120,7 @@
 import {Refresh, Search} from "@element-plus/icons-vue";
 import {reactive, toRefs, onMounted} from "vue";
 import {getUserListApi} from "../../api/user/user";
+import {formatTime} from "../../utils/date";
 
 const state = reactive({
   // 搜索表单内容
@@ -154,6 +155,13 @@ const loadData = async (state: any) => {
   state.tableData = data.content
   state.total = data.totalElements
   state.loading = false
+}
+
+// 刷新
+const refresh = () => {
+  state.searchValue = ""
+  state.status = null
+  loadData(state)
 }
 
 // 挂载后加载数据
