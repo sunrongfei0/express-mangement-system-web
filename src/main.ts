@@ -22,6 +22,9 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(ElementPlus, {
     locale: zhCn
 })
+
+// 去掉警告
+app.config.warnHandler = () => null
 app.component('svg-icon', SvgIcon)
 app.mount('#app')
 

@@ -7,35 +7,19 @@
   </el-menu-item>
 
 
+<!--  <el-menu-item index="1">-->
+<!--    <el-icon>-->
+<!--      <Basketball/>-->
+<!--    </el-icon>-->
+<!--    <span>个人设置</span>-->
+<!--  </el-menu-item>-->
+
   <el-menu-item index="/system/user">
     <el-icon>
       <Basketball/>
     </el-icon>
-    <span>个人设置</span>
+    <span>用户管理</span>
   </el-menu-item>
-
-  <el-menu-item index="2">
-    <el-icon>
-      <Basketball/>
-    </el-icon>
-    <span>待入库</span>
-  </el-menu-item>
-
-  <el-menu-item index="3">
-    <el-icon>
-      <Basketball/>
-    </el-icon>
-    <span>快递查询</span>
-  </el-menu-item>
-
-  <el-menu-item index="3">
-    <el-icon>
-      <Basketball/>
-    </el-icon>
-    <span>寄快递</span>
-  </el-menu-item>
-
-
 </template>
 
 <script setup lang="ts">

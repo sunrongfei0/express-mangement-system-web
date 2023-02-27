@@ -7,8 +7,10 @@
       <img src="../../../assets/logo.png">
     </div>
     <!--  logo end  -->
-    <UserAside v-if="userInfo.role===1"/>
-    <ExpressCenter v-else-if="userInfo.role===2"/>
+    <AdminAside v-if="userInfo.role===0"/>
+    <UserAside v-else-if="userInfo.role===1"/>
+    <ExpressCenterAside v-else-if="userInfo.role===2"/>
+    <CourierAside v-else-if="userInfo.role===3"/>
   </el-menu>
 </template>
 
@@ -17,8 +19,10 @@ import {useRoute} from 'vue-router';
 import {computed} from "vue";
 import {useSettingStore} from "../../../store/modules/setting";
 import UserAside from "./menu/UserAside.vue";
-import ExpressCenter from "./menu/ExpressCenter.vue";
+import ExpressCenterAside from "./menu/ExpressCenterAside.vue";
 import {useUserStore} from "../../../store/modules/user";
+import AdminAside from "./menu/AdminAside.vue";
+import CourierAside from "./menu/CourierAside.vue";
 
 const route = useRoute();
 const settingStore = useSettingStore();

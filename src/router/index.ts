@@ -10,7 +10,7 @@ const routers = [{
 }, {
     path: '/index',
     name: 'index',
-    component: ()=> import('../views/layout/Index.vue'),
+    component: () => import('../views/layout/Index.vue'),
     redirect: '/home',
     children: [{
         path: '/home',
@@ -22,13 +22,29 @@ const routers = [{
     path: '/system',
     name: 'system',
     meta: {title: '系统管理'},
-    redirect: '/system/user',
+    redirect: '/system',
     component: () => import('../views/layout/Index.vue'),
     children: [{
         path: 'user',
         name: 'user',
-        meta: {title: '个人设置'},
+        meta: {title: '用户管理'},
         component: () => import('../views/user/UserList.vue')
+    }, {
+        path: 'express',
+        name: 'express',
+        meta: {title: '快递管理'},
+        redirect: '/system/express/addexpress',
+        children: [{
+            path: 'addexpress',
+            name: 'addexpress',
+            meta: {title: '新增快递'},
+            component: () => import('../views/express/ExpressCenterList.vue')
+        }]
+    }, {
+        path: 'expresscenter',
+        name: 'expresscenter',
+        meta: {title: '关联快递中心'},
+        component: () => import('../views/user/ExpressCenterList.vue')
     }]
 }]
 

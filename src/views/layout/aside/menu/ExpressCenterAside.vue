@@ -18,29 +18,24 @@
     <el-icon>
       <Basketball/>
     </el-icon>
-    <span>我的快递</span>
+    <span>待入库</span>
   </el-menu-item>
 
   <el-menu-item index="3">
     <el-icon>
       <Basketball/>
     </el-icon>
-    <span>快递代取</span>
+    <span>快递查询</span>
   </el-menu-item>
 
-  <el-menu-item index="/system/expresscenter">
+  <el-menu-item index="3">
     <el-icon>
       <Basketball/>
     </el-icon>
-    <span>关联快递中心</span>
+    <span>寄快递</span>
   </el-menu-item>
 
-  <el-menu-item index="4">
-    <el-icon>
-      <Basketball/>
-    </el-icon>
-    <span>寄件服务</span>
-  </el-menu-item>
+
 </template>
 
 <script setup lang="ts">

@@ -7,7 +7,7 @@
           <el-icon style="margin-right: 10px;">
             <UserFilled/>
           </el-icon>
-          用户管理
+          快递中心列表
         </h3>
         <!-- 搜索区域 start -->
         <div class="card-search">
@@ -16,7 +16,7 @@
               <el-input :prefix-icon="Search" v-model="searchValue" @keyup.enter.native="search"
                         placeholder="关键字搜索(回车)"></el-input>
             </el-col>
-            <el-col :span="4">
+            <el-col :span="8">
               <el-select v-model="status" placeholder="请选择状态">
                 <el-option label="全部" value="-1"></el-option>
                 <el-option label="封禁" value="0"></el-option>
@@ -24,18 +24,6 @@
               </el-select>
             </el-col>
 
-            <el-col :span="4">
-              <el-select v-model="role" placeholder="请选择角色">
-                <el-option label="全部" value="-1"></el-option>
-                <el-option label="用户" value="1"></el-option>
-                <el-option label="快递中心" value="2"></el-option>
-                <el-option label="快递员" value="3"></el-option>
-              </el-select>
-            </el-col>
-
-<!--            <el-col :span="5">-->
-<!--              <el-button plain style="width: 100%; color: #2fa7b9" @click="addUser">添加用户</el-button>-->
-<!--            </el-col>-->
             <el-col :span="3" style="display: inline-flex;justify-content: center;align-items: center;cursor: pointer">
               <el-icon style="font-size: 20px;color: #b3b6bc" @click="refresh">
                 <Refresh/>
@@ -55,26 +43,11 @@
                 :row-class-name="rowClassName"
                 :header-cell-style="{fontSize:'15px',background:'#148557',color:'white',textAlign:'center'}">
         <el-table-column label="序号" width="100" type="index" :index="Nindex"/>
-        <el-table-column label="用户名称">
-          <template #default="scope">
-            <el-tooltip :content="scope.row.username" placement="top" effect="light">
-              <span class="highlight">{{ scope.row.username }}</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
 
-        <el-table-column label="真实姓名">
+        <el-table-column label="快递中心名称">
           <template #default="scope">
             <el-tooltip :content="scope.row.realname" placement="top" effect="light">
               <span class="highlight">{{ scope.row.realname }}</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-
-        <el-table-column label="性别">
-          <template #default="scope">
-            <el-tooltip :content="scope.row.sex" placement="top" effect="light">
-              <span class="highlight">{{ scope.row.sex }}</span>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -113,13 +86,21 @@
 
         <el-table-column label="操作">
           <template #default="scope">
-<!--            <el-button size="small" @click="editUser(scope.row.id)">编辑</el-button>-->
-            <el-popconfirm confirm-button-text="确定" cancel-button-text="取消" :icon="Delete"
+            <el-popconfirm v-if="!scope.row.isassociation" confirm-button-text="确定" cancel-button-text="取消" :icon="Delete"
                            icon-color="#626AEF"
-                           :title="'确定删除用户名为「'+scope.row.username+'」的用户吗?'"
-                           @confirm="delUser(scope.row.id)">
+                           :title="'确定关联名称为「'+scope.row.realname+'」的快递中心吗?'"
+                           @confirm="relevance(scope.row.id)">
               <template #reference>
-                <el-button size="small" type="danger" style="margin-bottom: 10px">删除</el-button>
+                <el-button size="small" type="success" style="margin-bottom: 10px">关联</el-button>
+              </template>
+            </el-popconfirm>
+
+            <el-popconfirm v-else confirm-button-text="确定" cancel-button-text="取消" :icon="Delete"
+                           icon-color="#626AEF"
+                           :title="'确定解除与名称为「'+scope.row.realname+'」的快递中心的关联吗?'"
+                           @confirm="delrelevance(scope.row.id)">
+              <template #reference>
+                <el-button size="small" type="danger" style="margin-bottom: 10px">解除关联</el-button>
               </template>
             </el-popconfirm>
           </template>
@@ -136,49 +117,15 @@
     <!-- 表格区域 end -->
   </el-card>
 
-  <!-- 新增用户信息弹出框start -->
-  <el-dialog align-center v-model="addUserDialogFormVisible" width="42%">
-    <template #header="{close,titleId,titleClass}">
-      <div class="my-header">
-        <el-icon size="26px">
-          <Edit/>
-        </el-icon>
-        <h1 id="titleId">{{ addTitle }}</h1>
-      </div>
-    </template>
-    <!-- 添加用户组件 start-->
-    <AddUser @closeAddUserForm="closeAddUserForm" @success="success"/>
-    <!-- 添加用户组件 end-->
-  </el-dialog>
-  <!-- 新增用户信息弹出框end -->
-
-  <!-- 修改用户信息弹出框 start -->
-  <el-dialog align-center v-model="editUserDialogFormVisible" width="42%" destroy-on-close>
-    <template #header="{close,titleId,titleClass}">
-      <div class="my-header">
-        <el-icon size="26px">
-          <EditPen/>
-        </el-icon>
-        <h1 id="titleId">{{ editTitle }}</h1>
-      </div>
-    </template>
-
-    <!-- 编写用户组件start -->
-    <EditUser :userInfo="userInfo" @closeEditUserForm="closeEditUserForm" @success="success"/>
-    <!-- 编写用户组件end -->
-
-  </el-dialog>
-  <!-- 修改用户信息弹出框 end -->
 </template>
 
 <script setup lang="ts">
 import {Refresh, Search} from "@element-plus/icons-vue";
 import {reactive, toRefs, onMounted, watch, ref} from "vue";
-import {deleteUserApi, getUserApi, getUserListApi} from "../../api/user/user";
+import {getUserListApi} from "../../api/user/user";
 import {formatTime} from "../../utils/date";
 import {ElMessage} from "element-plus";
-import AddUser from "./AddUser.vue";
-import EditUser from "./EditUser.vue";
+import {delrelevanceApi, relevanceApi} from "../../api/association/association";
 
 const state = reactive({
   // 搜索表单内容
@@ -206,6 +153,8 @@ const loadData = async (state: any) => {
   state.loading = true
   // 先清空数据
   state.tableData = []
+  // 本列表只会显示快递中心
+  state.role = 2
   const params = {
     'pageIndex': state.pageIndex,
     'pageSize': state.pageSize,
@@ -215,11 +164,14 @@ const loadData = async (state: any) => {
   }
 
   const {data} = await getUserListApi(params)
-  console.log(data.total);
   state.tableData = data.dataList
   state.total = data.total
   state.loading = false
 }
+
+const savedata = reactive({
+  centerid: 0,
+})
 
 // 刷新
 const refresh = () => {
@@ -248,10 +200,10 @@ const Nindex = (index: number) => {
 }
 
 // 监听用户状态下拉框内容的改变
-watch([() => state.status, () => state.role], (val, preVal) => {
+watch(() => state.status, (val, preVal) => {
       if (val) {
         state.searchValue = ""
-        if (state.role === -1 && state.status === -1) {
+        if (state.status === -1) {
           // 查询全部内容
           loadData(null);
         } else {
@@ -267,48 +219,21 @@ const changePage = (val: number) => {
   loadData(state);
 }
 
-// 添加用户弹窗状态
-const addUserDialogFormVisible = ref(false);
-// 定义表单标题
-const addTitle = "新增用户";
-// 添加用户
-const addUser = () => {
-  addUserDialogFormVisible.value = true;
+// 添加关联
+const relevance = async (id: number) => {
+  savedata.centerid = id;
+  const {data} = await relevanceApi(savedata)
+  if (data.status === 200) {
+    ElMessage.success(data.message)
+    await loadData(state)
+  } else {
+    ElMessage.error(data.message)
+  }
 }
 
-// 关闭新增用户弹出框
-const closeAddUserForm = () => {
-  addUserDialogFormVisible.value = false
-}
-
-// 提交表单回调函数
-const success = () => {
-  loadData(state)
-  addUserDialogFormVisible.value = false
-  editUserDialogFormVisible.value = false
-}
-
-// 编辑用户弹出框
-const editUserDialogFormVisible = ref(false)
-const editTitle = ref('编辑用户')
-
-// 编辑用户信息
-const userInfo = ref()
-const editUser = async (id: number) => {
-  const {data} = await getUserApi(id)
-  userInfo.value = data.result
-  editUserDialogFormVisible.value = true
-}
-
-// 关闭编辑用户弹出框
-const closeEditUserForm = () => {
-  editUserDialogFormVisible.value = false
-}
-
-// 删除用户信息
-const delUser = async (id: number) => {
-  if (id == null) return
-  const {data} = await deleteUserApi(id)
+// 解除关联
+const delrelevance = async (id:number) =>{
+  const {data} = await delrelevanceApi(id)
   if (data.status === 200) {
     ElMessage.success(data.message)
     await loadData(state)
@@ -364,7 +289,7 @@ const {tableData, pageIndex, pageSize, loading, total, status, role, searchValue
   justify-content: flex-start;
 }
 
-.card-search{
+.card-search {
   float: none;
 }
 </style>
