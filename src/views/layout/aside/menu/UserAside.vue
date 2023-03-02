@@ -28,7 +28,7 @@
     <span>快递代取</span>
   </el-menu-item>
 
-  <el-menu-item index="/system/expresscenter">
+  <el-menu-item index="/index/expresscenter">
     <el-icon>
       <Basketball/>
     </el-icon>

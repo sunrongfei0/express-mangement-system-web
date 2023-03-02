@@ -14,7 +14,7 @@
 <!--    <span>个人设置</span>-->
 <!--  </el-menu-item>-->
 
-  <el-menu-item index="2">
+  <el-menu-item index="/index/insertlibrary">
     <el-icon>
       <Basketball/>
     </el-icon>

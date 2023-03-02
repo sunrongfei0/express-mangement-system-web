@@ -17,34 +17,37 @@ const routers = [{
         name: 'home',
         meta: {title: '首页', icon: 'House', affix: true},
         component: () => import('../views/home/Index.vue'),
-    }]
-}, {
-    path: '/system',
-    name: 'system',
-    meta: {title: '系统管理'},
-    redirect: '/system',
-    component: () => import('../views/layout/Index.vue'),
-    children: [{
+    }, {
         path: 'user',
         name: 'user',
         meta: {title: '用户管理'},
         component: () => import('../views/user/UserList.vue')
-    }, {
+    }, { // 快递员
         path: 'express',
         name: 'express',
         meta: {title: '快递管理'},
-        redirect: '/system/express/addexpress',
+        redirect: '/index/express/addexpress',
         children: [{
             path: 'addexpress',
             name: 'addexpress',
             meta: {title: '新增快递'},
             component: () => import('../views/express/ExpressCenterList.vue')
+        }, {
+            path: 'expresslist',
+            name: 'expresslist',
+            meta: {title: '快递列表'},
+            component: () => import('../views/express/ExpressList.vue')
         }]
     }, {
         path: 'expresscenter',
         name: 'expresscenter',
         meta: {title: '关联快递中心'},
         component: () => import('../views/user/ExpressCenterList.vue')
+    }, {// 快递中心
+        path: 'insertlibrary',
+        name: 'insertlibrary',
+        meta: {title: '快递整理'},
+        component: () => import('../views/express/ExpressList_Center.vue')
     }]
 }]
 

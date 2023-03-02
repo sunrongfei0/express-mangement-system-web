@@ -31,6 +31,23 @@
 import AsideMenu from './aside/Index.vue'
 // 引入顶部自定义组件
 import TopBar from "./header/TopBar.vue"
+import {onMounted, onUnmounted, ref} from "vue";
+
+const timer = ref()
+// 组件加载时创建定时器
+onMounted(() => {
+  console.log("定时器创建...")
+  timer.value = setInterval(() => {
+    console.log("定时器执行一次...")
+  }, 60000)
+})
+
+// 组件销毁之前销毁定时器
+onUnmounted(() => {
+  clearInterval(timer.value)
+  timer.value = ""
+  console.log("定时器被销毁...")
+})
 </script>
 
 <style scoped>

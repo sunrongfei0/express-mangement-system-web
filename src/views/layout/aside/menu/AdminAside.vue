@@ -14,7 +14,7 @@
 <!--    <span>个人设置</span>-->
 <!--  </el-menu-item>-->
 
-  <el-menu-item index="/system/user">
+  <el-menu-item index="/index/user">
     <el-icon>
       <Basketball/>
     </el-icon>

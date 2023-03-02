@@ -89,7 +89,7 @@ const rules = reactive({
 })
 // 表单数据
 const ruleForm = reactive({
-  username: 'jdexpress',
+  username: 'hdcenter',
   password: '123456',
 })
 // 显示密码图标

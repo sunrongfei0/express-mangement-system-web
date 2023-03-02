@@ -36,14 +36,6 @@
                 :header-cell-style="{fontSize:'15px',background:'#148557',color:'white',textAlign:'center'}">
         <el-table-column label="序号" width="100" type="index" :index="Nindex"/>
 
-        <el-table-column label="快递中心名称">
-          <template #default="scope">
-            <el-tooltip :content="scope.row.centername" placement="top" effect="light">
-              <span class="highlight">{{ scope.row.centername }}</span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-
         <el-table-column label="快递单号">
           <template #default="scope">
             <el-tooltip :content="scope.row.expressno" placement="top" effect="light">
@@ -129,7 +121,7 @@
 <script setup lang="ts">
 import {Refresh, Search} from "@element-plus/icons-vue";
 import {reactive, toRefs, onMounted, ref} from "vue";
-import {deleteExpressApi, getExpressApi, getExpressListApi} from "../../api/express/express"
+import {getExpressListApi} from "../../api/express/express"
 import {formatTime} from "../../utils/date";
 import {ElMessage} from "element-plus";
 import AddExpress from "./AddExpress.vue";
@@ -171,23 +163,7 @@ const loadData = async (state: any) => {
 // 添加快递弹窗状态
 const editExpressDialogFormVisible = ref(false);
 const expressInfo = ref()
-// 定义表单标题
-const editTitle = "修改快递信息";
-// 修改快递
-const editExpress = async (id: number) => {
-  const {data} = await getExpressApi(id);
-  expressInfo.value = data.result
-  editExpressDialogFormVisible.value = true;
-}
 
-// 关闭新增快递弹出框
-const closeEditExpressForm = () => {
-  editExpressDialogFormVisible.value = false
-}
-
-const success = () => {
-  editExpressDialogFormVisible.value = false
-}
 
 // 刷新
 const refresh = () => {
@@ -217,18 +193,6 @@ const Nindex = (index: number) => {
 const changePage = (val: number) => {
   state.pageIndex = val
   loadData(state);
-}
-
-// 删除数据
-const delExpress = async (id: number) => {
-  if (id == null) return
-  const {data} = await deleteExpressApi(id)
-  if (data.status === 200) {
-    ElMessage.success(data.message)
-    await loadData(state)
-  } else {
-    ElMessage.error(data.message)
-  }
 }
 
 // 挂载后加载数据

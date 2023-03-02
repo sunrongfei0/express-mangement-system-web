@@ -215,7 +215,6 @@ const loadData = async (state: any) => {
   }
 
   const {data} = await getUserListApi(params)
-  console.log(data.total);
   state.tableData = data.dataList
   state.total = data.total
   state.loading = false

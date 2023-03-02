@@ -12,18 +12,10 @@
         <!-- 搜索区域 start -->
         <div class="card-search">
           <el-row :gutter="10">
-            <el-col :span="8">
+            <el-col :span="18">
               <el-input :prefix-icon="Search" v-model="searchValue" @keyup.enter.native="search"
                         placeholder="关键字搜索(回车)"></el-input>
             </el-col>
-            <el-col :span="8">
-              <el-select v-model="status" placeholder="请选择状态">
-                <el-option label="全部" value="-1"></el-option>
-                <el-option label="封禁" value="0"></el-option>
-                <el-option label="正常" value="1"></el-option>
-              </el-select>
-            </el-col>
-
             <el-col :span="3" style="display: inline-flex;justify-content: center;align-items: center;cursor: pointer">
               <el-icon style="font-size: 20px;color: #b3b6bc" @click="refresh">
                 <Refresh/>
@@ -86,7 +78,9 @@
 
         <el-table-column label="操作">
           <template #default="scope">
-              <el-button size="small" type="primary" style="margin-bottom: 10px">新增快递</el-button>
+            <el-button size="small" type="primary" style="margin-bottom: 10px" @click="addExpress(scope.row.id)">
+              新增快递
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -101,6 +95,24 @@
     <!-- 表格区域 end -->
   </el-card>
 
+
+  <!-- 新增快递信息弹出框 start -->
+  <el-dialog align-center v-model="addExpressDialogFormVisible" width="42%" destroy-on-close>
+    <template #header="{close,titleId,titleClass}">
+      <div class="my-header">
+        <el-icon size="26px">
+          <EditPen/>
+        </el-icon>
+        <h1 id="titleId">{{ addTitle }}</h1>
+      </div>
+    </template>
+
+    <!-- 编写快递组件start -->
+    <AddExpress :expressInfo="expressInfo" @closeAddExpressForm="closeAddExpressForm" @success="success"/>
+    <!-- 编写快递组件end -->
+
+  </el-dialog>
+  <!-- 新增快递信息弹出框 end -->
 </template>
 
 <script setup lang="ts">
@@ -109,7 +121,7 @@ import {reactive, toRefs, onMounted, watch, ref} from "vue";
 import {getUserListApi} from "../../api/express/express"
 import {formatTime} from "../../utils/date";
 import {ElMessage} from "element-plus";
-import {delrelevanceApi, relevanceApi} from "../../api/association/association";
+import AddExpress from "./AddExpress.vue";
 
 const state = reactive({
   // 搜索表单内容
@@ -117,7 +129,7 @@ const state = reactive({
   // 表格数据内容
   tableData: [],
   // 登录用户信息
-  userInfo: null,
+  expressInfo: null,
   // 用户状态
   status: null,
   //总条数
@@ -152,10 +164,21 @@ const loadData = async (state: any) => {
   state.total = data.total
   state.loading = false
 }
+// 编辑快递信息
+const expressInfo = ref({
+  // 给快递中心默认值0
+  centerid: 0
+});
 
-const savedata = reactive({
-  centerid: 0,
-})
+// 添加快递弹窗状态
+const addExpressDialogFormVisible = ref(false);
+// 定义表单标题
+const addTitle = "新增快递";
+// 添加快递
+const addExpress = (centerid: number) => {
+  expressInfo.value.centerid = centerid
+  addExpressDialogFormVisible.value = true;
+}
 
 // 刷新
 const refresh = () => {
@@ -183,6 +206,17 @@ const Nindex = (index: number) => {
   return index + 1 + (page - 1) * pageSize
 }
 
+// 关闭新增快递弹出框
+const closeAddExpressForm = () => {
+  addExpressDialogFormVisible.value = false
+}
+
+// 操作成功关闭弹出框
+const success = () => {
+  loadData(state)
+  addExpressDialogFormVisible.value = false
+}
+
 // 监听用户状态下拉框内容的改变
 watch(() => state.status, (val, preVal) => {
       if (val) {
@@ -203,28 +237,6 @@ const changePage = (val: number) => {
   loadData(state);
 }
 
-// 添加关联
-const relevance = async (id: number) => {
-  savedata.centerid = id;
-  const {data} = await relevanceApi(savedata)
-  if (data.status === 200) {
-    ElMessage.success(data.message)
-    await loadData(state)
-  } else {
-    ElMessage.error(data.message)
-  }
-}
-
-// 解除关联
-const delrelevance = async (id:number) =>{
-  const {data} = await delrelevanceApi(id)
-  if (data.status === 200) {
-    ElMessage.success(data.message)
-    await loadData(state)
-  } else {
-    ElMessage.error(data.message)
-  }
-}
 
 // 挂载后加载数据
 onMounted(() => {
