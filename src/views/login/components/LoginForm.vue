@@ -115,7 +115,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
           sex: data.result.sex,
           userIcon: data.result.userIcon,
           createTime: data.result.createTime,
-          role: data.result.role
+          role: data.result.role,
+          address:data.result.address,
+          phone:data.result.phone
         })
         await router.push({
           path: '/index',

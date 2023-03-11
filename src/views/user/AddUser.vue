@@ -56,17 +56,21 @@
         </el-form-item>
       </el-col>
 
-      <el-col :span="12" v-if="formUser.role===3">
-        <el-form-item label="快递类型" prop="expresstype">
-          <el-select v-model="formUser.expresstype" placeholder="请选择快递类型">
-            <el-option label="顺丰" value="1"></el-option>
-            <el-option label="京东" value="2"></el-option>
-            <el-option label="韵达" value="3"></el-option>
-            <el-option label="邮政" value="4"></el-option>
-            <el-option label="中通" value="5"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
+      <!--      <el-col :span="12">-->
+      <!--        <el-form-item label="快递类型" prop="expresstype">-->
+      <!--          <el-select v-model="formUser.expresstype" placeholder="请选择快递类型">-->
+      <!--            <el-option label="顺丰" value="SF"></el-option>-->
+      <!--            <el-option label="京东" value="JD"></el-option>-->
+      <!--            <el-option label="邮政" value="EMS"></el-option>-->
+      <!--            <el-option label="韵达" value="YUNDA"></el-option>-->
+      <!--            <el-option label="申通" value="STO"></el-option>-->
+      <!--            <el-option label="圆通" value="YTO"></el-option>-->
+      <!--            <el-option label="中通" value="ZTO"></el-option>-->
+      <!--            <el-option label="极兔" value="JS"></el-option>-->
+      <!--            <el-option label="其它" value="QT"></el-option>-->
+      <!--          </el-select>-->
+      <!--        </el-form-item>-->
+      <!--      </el-col>-->
     </el-row>
   </el-form>
 
@@ -89,12 +93,15 @@ const formUser = reactive({
   status: 1,
   role: 2,
   realname: '',
+  phone: '',
+  address: '',
   email: '',
   sex: '男',
-  expresstype:''
+  expresstype: ''
 })
 
 const emit = defineEmits(['closeAddUserForm', 'success'])
+
 
 // 定义表单约束规则
 const rules = reactive<FormRules>({

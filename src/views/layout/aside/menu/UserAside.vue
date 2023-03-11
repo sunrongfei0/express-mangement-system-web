@@ -14,18 +14,18 @@
 <!--    <span>个人设置</span>-->
 <!--  </el-menu-item>-->
 
-  <el-menu-item index="2">
+  <el-menu-item index="/index/expressmanagement">
     <el-icon>
       <Basketball/>
     </el-icon>
     <span>我的快递</span>
   </el-menu-item>
 
-  <el-menu-item index="3">
+  <el-menu-item index="/index/helpget">
     <el-icon>
       <Basketball/>
     </el-icon>
-    <span>快递代取</span>
+    <span>快递广场</span>
   </el-menu-item>
 
   <el-menu-item index="/index/expresscenter">
@@ -35,11 +35,39 @@
     <span>关联快递中心</span>
   </el-menu-item>
 
-  <el-menu-item index="4">
+  <el-menu-item index="/index/send">
     <el-icon>
       <Basketball/>
     </el-icon>
     <span>寄件服务</span>
+  </el-menu-item>
+
+  <el-menu-item index="/index/track">
+    <el-icon>
+      <Basketball/>
+    </el-icon>
+    <span>快递追踪</span>
+  </el-menu-item>
+
+  <el-menu-item index="--">
+    <el-icon>
+      <Basketball/>
+    </el-icon>
+    <span>微论坛</span>
+  </el-menu-item>
+
+  <el-menu-item index="--">
+    <el-icon>
+      <Basketball/>
+    </el-icon>
+    <span>公告列表</span>
+  </el-menu-item>
+
+  <el-menu-item index="--">
+    <el-icon>
+      <Basketball/>
+    </el-icon>
+    <span>反馈</span>
   </el-menu-item>
 </template>
 

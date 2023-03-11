@@ -20,6 +20,20 @@
     </el-icon>
     <span>用户管理</span>
   </el-menu-item>
+
+  <el-menu-item index="/index/announcement">
+    <el-icon>
+      <Basketball/>
+    </el-icon>
+    <span>公告管理</span>
+  </el-menu-item>
+
+  <el-menu-item index="--">
+    <el-icon>
+      <Basketball/>
+    </el-icon>
+    <span>反馈管理</span>
+  </el-menu-item>
 </template>
 
 <script setup lang="ts">

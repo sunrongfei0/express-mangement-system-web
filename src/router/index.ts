@@ -23,22 +23,16 @@ const routers = [{
         meta: {title: '用户管理'},
         component: () => import('../views/user/UserList.vue')
     }, { // 快递员
-        path: 'express',
-        name: 'express',
-        meta: {title: '快递管理'},
-        redirect: '/index/express/addexpress',
-        children: [{
-            path: 'addexpress',
-            name: 'addexpress',
-            meta: {title: '新增快递'},
-            component: () => import('../views/express/ExpressCenterList.vue')
-        }, {
-            path: 'expresslist',
-            name: 'expresslist',
-            meta: {title: '快递列表'},
-            component: () => import('../views/express/ExpressList.vue')
-        }]
+        path: 'addexpress',
+        name: 'addexpress',
+        meta: {title: '新增快递'},
+        component: () => import('../views/express/ExpressCenterList.vue')
     }, {
+        path: 'expresslist',
+        name: 'expresslist',
+        meta: {title: '快递列表'},
+        component: () => import('../views/express/ExpressList.vue')
+    },{
         path: 'expresscenter',
         name: 'expresscenter',
         meta: {title: '关联快递中心'},
@@ -47,7 +41,32 @@ const routers = [{
         path: 'insertlibrary',
         name: 'insertlibrary',
         meta: {title: '快递整理'},
-        component: () => import('../views/express/ExpressList_Center.vue')
+        component: () => import('../views/delivery/ExpressList_Center.vue')
+    }, {
+        path: 'expressmanagement',
+        name: 'expressmanagement',
+        meta: {title: '快递管理'},
+        component: () => import('../views/delivery/DeliveryList.vue')
+    },{
+        path: 'helpget',
+        name: 'helpget',
+        meta: {title: '快递广场'},
+        component: () => import('../views/helpget/HelpgetList.vue')
+    },{
+        path: 'send',
+        name: 'send',
+        meta: {title: '寄件服务'},
+        component: () => import('../views/send/SendList.vue')
+    },{
+        path: 'track',
+        name: 'track',
+        meta: {title: '快递追踪'},
+        component: () => import('../views/track/TrackList.vue')
+    },{
+        path: 'announcement',
+        name: 'announcement',
+        meta: {title: '公告管理'},
+        component: () => import('../views/announcement/AnnouncementList.vue')
     }]
 }]
 

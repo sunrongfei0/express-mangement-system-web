@@ -7,15 +7,16 @@
           <el-icon style="margin-right: 10px;">
             <UserFilled/>
           </el-icon>
-          快递列表
+          快递跟踪
         </h3>
         <!-- 搜索区域 start -->
         <div class="card-search">
-          <el-row :gutter="10">
-            <el-col :span="18">
-              <el-input :prefix-icon="Search" v-model="searchValue" @keyup.enter.native="search"
-                        placeholder="关键字搜索(回车)"></el-input>
+          <el-row :gutter="18">
+            <el-col :span="20">
+              <el-input :prefix-icon="Search" v-model="expressno" @keyup.enter.native="getTrack"
+                        placeholder="请输入单号(回车)"></el-input>
             </el-col>
+
             <el-col :span="3" style="display: inline-flex;justify-content: center;align-items: center;cursor: pointer">
               <el-icon style="font-size: 20px;color: #b3b6bc" @click="refresh">
                 <Refresh/>
@@ -36,6 +37,21 @@
                 :header-cell-style="{fontSize:'15px',background:'#148557',color:'white',textAlign:'center'}">
         <el-table-column label="序号" width="100" type="index" :index="Nindex"/>
 
+        <el-table-column label="快递类型">
+          <template #default="scope">
+            <div v-if="scope.row.expresstype==='SF'">顺丰</div>
+            <div v-else-if="scope.row.expresstype==='JD'">京东</div>
+            <div v-else-if="scope.row.expresstype==='YUNDA'">韵达</div>
+            <div v-else-if="scope.row.expresstype==='EMS'">邮政</div>
+            <div v-else-if="scope.row.expresstype==='YTO'">圆通</div>
+            <div v-else-if="scope.row.expresstype==='ZTO'">中通</div>
+            <div v-else-if="scope.row.expresstype==='STO'">申通</div>
+            <div v-else-if="scope.row.expresstype==='JT'">极兔</div>
+            <div v-else-if="scope.row.expresstype==='QT'">其它</div>
+            <div v-else>其它</div>
+          </template>
+        </el-table-column>
+
         <el-table-column label="快递单号">
           <template #default="scope">
             <el-tooltip :content="scope.row.expressno" placement="top" effect="light">
@@ -44,49 +60,43 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="收件人">
+        <el-table-column label="最新状态">
           <template #default="scope">
-            <el-tooltip :content="scope.row.recipient" placement="top" effect="light">
-              <span class="highlight">{{ scope.row.recipient }}</span>
+            <el-tooltip :content="scope.row.logisticsstatus" placement="top" effect="light">
+              <span class="highlight">{{ scope.row.logisticsstatus }}</span>
             </el-tooltip>
           </template>
         </el-table-column>
 
-        <el-table-column label="收件人电话">
+        <el-table-column label="最新消息">
           <template #default="scope">
-            <el-tooltip :content="scope.row.recipientPhone" placement="top" effect="light">
-              <span class="highlight">{{ scope.row.recipientPhone }}</span>
+            <el-tooltip :content="scope.row.thelastmessage" placement="top" effect="light">
+              <span class="highlight">{{ scope.row.thelastmessage }}</span>
             </el-tooltip>
           </template>
         </el-table-column>
 
-        <el-table-column label="寄件人">
+        <el-table-column label="最新更新时间">
           <template #default="scope">
-            <el-tooltip :content="scope.row.sender" placement="top" effect="light">
-              <span class="highlight">{{ scope.row.sender }}</span>
+            <el-tooltip :content="scope.row.thelasttime" placement="top" effect="light">
+              <span class="highlight">{{ formatTime(scope.row.thelasttime, 'yyyy-MM-dd HH:mm:ss') }}</span>
             </el-tooltip>
           </template>
         </el-table-column>
 
-        <el-table-column label="入站时间">
+        <el-table-column label="进度">
           <template #default="scope">
-            <el-tooltip :content="scope.row.createTime" placement="top" effect="light">
-              <span class="highlight">{{ formatTime(scope.row.createTime, 'yyyy-MM-dd HH:mm:ss') }}</span>
+            <el-tooltip :content="scope.row.progress" placement="top" effect="light">
+              <el-progress :percentage="scope.row.progress" :color="customColorMethod" />
             </el-tooltip>
           </template>
         </el-table-column>
+
 
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button @click="editExpress(scope.row.id)" style="margin-bottom: 10px">编辑</el-button>
-            <el-popconfirm confirm-button-text="确定" cancel-button-text="取消" :icon="Delete"
-                           icon-color="#626AEF"
-                           :title="'确定删除快递单号为「'+scope.row.expressno+'」的用户吗?'"
-                           @confirm="delExpress(scope.row.id)">
-              <template #reference>
-                <el-button type="danger" style="margin-bottom: 10px">删除</el-button>
-              </template>
-            </el-popconfirm>
+            <el-button type="success" @click="">更新</el-button>
+            <el-button type="primary" @click="getDetail(scope.row.expressno)">查看详情</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -101,38 +111,48 @@
     <!-- 表格区域 end -->
   </el-card>
 
-  <!-- 新增快递信息弹出框 start -->
-  <el-dialog align-center v-model="editExpressDialogFormVisible" width="42%" destroy-on-close>
+  <!-- 修改寄件信息弹出框 start -->
+  <el-dialog
+      align-center
+      v-model="trackDetailDialogVisible"
+      width="30%"
+      class="showAll_dialog"
+      destroy-on-close>
     <template #header="{close,titleId,titleClass}">
       <div class="my-header">
         <el-icon size="26px">
           <EditPen/>
         </el-icon>
-        <h1 id="titleId">{{ editTitle }}</h1>
+        <h1 id="titleId">{{ title }}</h1>
       </div>
     </template>
-    <!-- 编写快递组件start  和新增页共用组件 -->
-    <AddExpress :expressInfo="expressInfo" @closeAddExpressForm="closeEditExpressForm" @success="success"/>
-    <!-- 编写快递组件end -->
+
+    <!-- 编写用户组件start -->
+    <div style="height:70vh">
+      <el-scrollbar>
+        <TrackDetail class="trackDetail" :code="code"/>
+      </el-scrollbar>
+    </div>
+    <!-- 编写用户组件end -->
 
   </el-dialog>
-  <!-- 新增快递信息弹出框 end -->
+  <!-- 修改用户信息弹出框 end -->
 </template>
+
 <script setup lang="ts">
 import {Refresh, Search} from "@element-plus/icons-vue";
-import {reactive, toRefs, onMounted, ref} from "vue";
-import {getExpressListApi} from "../../api/express/express"
+import {reactive, toRefs, onMounted, watch, ref} from "vue";
 import {formatTime} from "../../utils/date";
 import {ElMessage} from "element-plus";
-import AddExpress from "./AddExpress.vue";
+import {useUserStore} from "../../store/modules/user";
+import {getTrackApi, getTrackListApi} from "../../api/track/track";
+import TrackDetail from "./TrackDetail.vue";
 
 const state = reactive({
   // 搜索表单内容
   searchValue: "",
   // 表格数据内容
   tableData: [],
-  // 登录用户信息
-  userInfo: null,
   //总条数
   total: 0,
   // 每页显示行数
@@ -141,9 +161,15 @@ const state = reactive({
   pageIndex: 1,
   //数据加载
   loading: false,
+  // 角色
+  role: null
 })
 
-// 获取快递列表数据
+const {userInfo} = useUserStore();
+
+const expressno = ref()
+
+// 获取用户列表数据
 const loadData = async (state: any) => {
   state.loading = true
   // 先清空数据
@@ -154,16 +180,11 @@ const loadData = async (state: any) => {
     'searchValue': state.searchValue
   }
 
-  const {data} = await getExpressListApi(params)
+  const {data} = await getTrackListApi(params)
   state.tableData = data.dataList
   state.total = data.total
   state.loading = false
 }
-
-// 添加快递弹窗状态
-const editExpressDialogFormVisible = ref(false);
-const expressInfo = ref()
-
 
 // 刷新
 const refresh = () => {
@@ -176,9 +197,31 @@ const search = () => {
   if (state.searchValue !== null) {
     ElMessage({
       type: 'success',
-      message: `关键字“${state.searchValue}”搜索内容如下`,
+      message: `单号“${state.searchValue}”搜索内容如下`,
     })
     loadData(state)
+  }
+}
+
+const getTrack = async () => {
+  if (expressno !== null) {
+    const {data} = await getTrackApi(expressno.value)
+    if (data.status === 200) {
+      ElMessage.success(data.message)
+      loadData(state)
+    } else {
+      ElMessage.error(data.message)
+    }
+    loadData(state)
+  }
+}
+
+
+const code = ref()
+const getDetail = async (expressno: string) => {
+  if (code !== null) {
+    code.value = expressno
+    trackDetailDialogVisible.value = true
   }
 }
 
@@ -195,12 +238,16 @@ const changePage = (val: number) => {
   loadData(state);
 }
 
+const trackDetailDialogVisible = ref(false)
+const title = ref('追踪记录')
+
+
 // 挂载后加载数据
 onMounted(() => {
   loadData(state)
 })
 
-const {tableData, pageIndex, pageSize, loading, total, searchValue} = toRefs(state)
+const {tableData, pageIndex, pageSize, loading, total, role, searchValue} = toRefs(state);
 </script>
 
 <style scoped>
@@ -245,4 +292,10 @@ const {tableData, pageIndex, pageSize, loading, total, searchValue} = toRefs(sta
 .card-search {
   float: none;
 }
+
+/* dialog */
+.content-box{
+  line-height: 30px;
+}
+
 </style>
