@@ -7,7 +7,7 @@
           <el-icon style="margin-right: 10px;">
             <UserFilled/>
           </el-icon>
-          公告列表
+          消息列表
         </h3>
         <!-- 搜索区域 start -->
         <div class="card-search">
@@ -20,10 +20,6 @@
               <el-icon style="font-size: 20px;color: #b3b6bc" @click="refresh">
                 <Refresh/>
               </el-icon>
-            </el-col>
-
-            <el-col :span="6">
-              <el-button plain style="width: 100%; color: #2fa7b9" @click="addAnn">添加公告</el-button>
             </el-col>
           </el-row>
         </div>
@@ -58,44 +54,25 @@
 
         <el-table-column label="状态">
           <template #default="scope">
-            <div v-if="scope.row.ispublish===0">未发布</div>
-            <div v-else-if="scope.row.ispublish===1">已发布</div>
+            <div v-if="scope.row.isread===0" style="color:red;">未读</div>
+            <div v-else-if="scope.row.isread===1" style="color: green">已读</div>
           </template>
         </el-table-column>
 
 
         <el-table-column label="发布时间">
           <template #default="scope">
-            <el-tooltip :content="scope.row.updateTime" placement="top" effect="light">
-              <span class="highlight">{{ formatTime(scope.row.updateTime, 'yyyy-MM-dd HH:mm:ss') }}</span>
+            <el-tooltip :content="scope.row.createTime" placement="top" effect="light">
+              <span class="highlight">{{ formatTime(scope.row.createTime, 'yyyy-MM-dd HH:mm:ss') }}</span>
             </el-tooltip>
           </template>
         </el-table-column>
 
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button v-if="scope.row.ispublish===0" @click="editAnn(scope.row.id)" style="margin-bottom: 10px">
-              编辑
+            <el-button @click="detail(scope.row.id)" type="success" style="margin-bottom: 10px">
+              查看
             </el-button>
-            <el-popconfirm v-if="scope.row.ispublish===0" confirm-button-text="确定" cancel-button-text="取消"
-                           :icon="Delete"
-                           icon-color="#626AEF"
-                           :title="'确定删除公告：「'+scope.row.title+'」吗?'"
-                           @confirm="delAnn(scope.row.id)">
-              <template #reference>
-                <el-button type="danger" style="margin-bottom: 10px">删除</el-button>
-              </template>
-            </el-popconfirm>
-
-            <el-popconfirm v-if="scope.row.ispublish===0" confirm-button-text="确定" cancel-button-text="取消"
-                           :icon="Delete"
-                           icon-color="#626AEF"
-                           :title="'确定发布公告：「'+scope.row.title+'」吗?发布后用户将收到消息，无法撤回'"
-                           @confirm="publishAnn(scope.row.id)">
-              <template #reference>
-                <el-button type="primary" style="margin-bottom: 10px">发布</el-button>
-              </template>
-            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -111,17 +88,17 @@
   </el-card>
 
   <!-- 新增快递信息弹出框 start -->
-  <el-dialog align-center v-model="editAnnDialogFormVisible" width="42%" destroy-on-close>
+  <el-dialog align-center v-model="editMsgDialogFormVisible" width="42%" destroy-on-close>
     <template #header="{close,titleId,titleClass}">
       <div class="my-header">
         <el-icon size="26px">
           <EditPen/>
         </el-icon>
-        <h1 id="titleId">{{ editTitle }}</h1>
+        <h1 id="titleId">来自：「{{ editTitle }}」的消息</h1>
       </div>
     </template>
     <!-- 编写快递组件start  和新增页共用组件 -->
-    <EditAnnouncement :annInfo="annInfo" @closeEditAnnForm="closeEditAnnForm" @success="success"/>
+    <MessageDetail :msgInfo="msgInfo" />
     <!-- 编写快递组件end -->
 
   </el-dialog>
@@ -132,8 +109,8 @@ import {Refresh, Search} from "@element-plus/icons-vue";
 import {reactive, toRefs, onMounted, ref} from "vue";
 import {formatTime} from "../../utils/date";
 import {ElMessage} from "element-plus";
-import {deleteAnnApi, getAnnApi, getAnnListApi, publishAnnApi} from "../../api/announcement/announcement";
-import EditAnnouncement from "./EditAnnouncement.vue";
+import {getDetailApi, getMsgListApi} from "../../api/message/message";
+import MessageDetail from "./MessageDetail.vue";
 
 const state = reactive({
   // 搜索表单内容
@@ -163,39 +140,24 @@ const loadData = async (state: any) => {
     'searchValue': state.searchValue
   }
 
-  const {data} = await getAnnListApi(params)
+  const {data} = await getMsgListApi(params)
   state.tableData = data.dataList
   state.total = data.total
   state.loading = false
 }
 
 // 添加弹窗状态
-const editAnnDialogFormVisible = ref(false);
-const annInfo = ref()
+const editMsgDialogFormVisible = ref(false);
+const msgInfo = ref()
 // 定义表单标题
 let editTitle = "";
 // 修改
-const editAnn = async (id: number) => {
-  editTitle = "修改公告";
-  const {data} = await getAnnApi(id);
-  annInfo.value = data.result
-  editAnnDialogFormVisible.value = true;
-}
-
-const addAnn = async () => {
-  editTitle = "新增公告"
-  annInfo.value = {}
-  editAnnDialogFormVisible.value = true
-}
-
-// 关闭新增弹出框
-const closeEditAnnForm = () => {
-  editAnnDialogFormVisible.value = false
-}
-
-const success = () => {
-  loadData(state)
-  editAnnDialogFormVisible.value = false
+const detail = async (id: number) => {
+  const {data} = await getDetailApi(id);
+  msgInfo.value = data.result
+  editTitle = msgInfo.value.sender;
+  editMsgDialogFormVisible.value = true;
+  await loadData(state);
 }
 
 // 刷新
@@ -226,30 +188,6 @@ const Nindex = (index: number) => {
 const changePage = (val: number) => {
   state.pageIndex = val
   loadData(state);
-}
-
-// 删除数据
-const delAnn = async (id: number) => {
-  if (id == null) return
-  const {data} = await deleteAnnApi(id)
-  if (data.status === 200) {
-    ElMessage.success(data.message)
-    await loadData(state)
-  } else {
-    ElMessage.error(data.message)
-  }
-}
-
-const publishAnn = async (id: number) => {
-  if (id == null) return
-  const {data} = await publishAnnApi(id)
-  if (data.status === 200) {
-    ElMessage.success(data.message)
-    await loadData(state)
-  } else {
-    ElMessage.error(data.message)
-  }
-  await loadData(state);
 }
 
 // 挂载后加载数据
@@ -302,4 +240,5 @@ const {tableData, pageIndex, pageSize, loading, total, searchValue} = toRefs(sta
 .card-search {
   float: none;
 }
+
 </style>

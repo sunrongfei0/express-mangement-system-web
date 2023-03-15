@@ -13,3 +13,10 @@ export function loginOutApi() {
         url: 'logOut'
     })
 }
+
+export function validateTokenApi() {
+    return request({
+        url: 'validateToken',
+        method: 'get'
+    })
+}

@@ -29,7 +29,6 @@ const code = ref(props.code)
 const getData = async (code: string) => {
   const {data} = await getDetailApi(code);
   state.dataList = data
-  console.log(data)
 }
 
 onMounted(() => {

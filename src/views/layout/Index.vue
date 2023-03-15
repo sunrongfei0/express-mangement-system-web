@@ -32,14 +32,28 @@ import AsideMenu from './aside/Index.vue'
 // 引入顶部自定义组件
 import TopBar from "./header/TopBar.vue"
 import {onMounted, onUnmounted, ref} from "vue";
+import {validateTokenApi} from "../../api/login/login";
 
 const timer = ref()
 // 组件加载时创建定时器
-onMounted(() => {
+onMounted(async () => {
   console.log("定时器创建...")
-  timer.value = setInterval(() => {
+  const {data} = await validateTokenApi()
+  if (data.status !== 200) {
+    // 返回登录页
+    window.location.href = "/";
+  }
+  timer.value = setInterval(async () => {
     console.log("定时器执行一次...")
-  }, 60000)
+    const {data} = await validateTokenApi()
+    if (data.status !== 200) {
+      // 返回登录页
+      window.location.href = "/";
+      clearInterval(timer.value)
+      timer.value = ""
+      console.log("定时器被销毁...")
+    }
+  }, 20000)
 })
 
 // 组件销毁之前销毁定时器

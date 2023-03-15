@@ -4,7 +4,7 @@
            :collapse-transition="true">
     <!--  logo start  -->
     <div class="imgBox hidden-xs-only" v-if="!isCollapse">
-      <img src="../../../assets/logo.png">
+      <img src="../../../assets/logo2.png" width="88">
     </div>
     <!--  logo end  -->
     <AdminAside v-if="userInfo.role===0"/>
@@ -35,6 +35,8 @@ const {userInfo} = useUserStore();
 .imgBox {
   width: 100%;
   height: 70px;
+  margin-bottom: 30px;
+
 }
 
 .imgBox img {

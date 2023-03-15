@@ -42,3 +42,24 @@ export function deleteUserApi(id: number) {
         method: 'delete',
     })
 }
+
+export function getMyInfoApi() {
+    return request({
+        url: '/user/getMyInfo',
+        method: 'get'
+    })
+}
+
+export function editPWApi(id: number, newpw: string) {
+    return request({
+        url: `/user/editPassword/${id}/${newpw}`,
+        method: 'put'
+    })
+}
+
+export function validatePWApi(id:number,oldpw:string){
+    return request({
+        url: `/user/validatePassword/${id}/${oldpw}`,
+        method: 'get'
+    })
+}

@@ -15,7 +15,8 @@
         <template #reference>
           <el-link :underline="false">
             <!-- 如果用户没有上传自己头像，就默认头像 -->
-            <img src="../../../assets/default_avatar.png" style="width: 40px; border-radius:50px ;">
+            <img v-if="userInfo.userIcon" :src="userInfo.userIcon" style="width: 40px; border-radius:50px ;">
+            <img v-else src="../../../assets/default_avatar.png" style="width: 40px; border-radius:50px ;">
             <span>{{ userInfo.realname }}</span>
           </el-link>
         </template>
@@ -26,7 +27,8 @@
           <div style="display: flex;gap: 16px;flex-direction: column">
             <div class="info-card">
               <div>
-                <img src="../../../assets/default_avatar.png">
+                <img v-if="userInfo.userIcon" :src="userInfo.userIcon">
+                <img v-else src="../../../assets/default_avatar.png">
                 <p>用户名：{{ userInfo.realname }}</p>
                 <p>Email:{{ userInfo.email }}</p>
                 <p>注册时间：{{ userInfo.createTime }}</p>

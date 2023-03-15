@@ -7,12 +7,12 @@
   </el-menu-item>
 
 
-  <!--  <el-menu-item index="/system/user">-->
-  <!--    <el-icon>-->
-  <!--      <Basketball/>-->
-  <!--    </el-icon>-->
-  <!--    <span>个人设置</span>-->
-  <!--  </el-menu-item>-->
+    <el-menu-item index="/index/userInfo">
+      <el-icon>
+        <Basketball/>
+      </el-icon>
+      <span>个人设置</span>
+    </el-menu-item>
 
   <el-menu-item index="/index/insertlibrary">
     <el-icon>
@@ -28,13 +28,6 @@
     <span>快递列表</span>
   </el-menu-item>
 
-  <el-menu-item index="3">
-    <el-icon>
-      <Basketball/>
-    </el-icon>
-    <span>快递查询</span>
-  </el-menu-item>
-
   <el-menu-item index="/index/send">
     <el-icon>
       <Basketball/>
@@ -42,18 +35,18 @@
     <span>寄件服务</span>
   </el-menu-item>
 
-  <el-menu-item index="--">
+  <el-menu-item index="/index/announcement">
     <el-icon>
       <Basketball/>
     </el-icon>
     <span>公告列表</span>
   </el-menu-item>
 
-  <el-menu-item index="--">
+  <el-menu-item index="/index/message">
     <el-icon>
       <Basketball/>
     </el-icon>
-    <span>反馈</span>
+    <span>消息查看</span>
   </el-menu-item>
 
 </template>

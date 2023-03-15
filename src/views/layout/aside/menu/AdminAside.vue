@@ -7,12 +7,12 @@
   </el-menu-item>
 
 
-<!--  <el-menu-item index="1">-->
-<!--    <el-icon>-->
-<!--      <Basketball/>-->
-<!--    </el-icon>-->
-<!--    <span>个人设置</span>-->
-<!--  </el-menu-item>-->
+  <el-menu-item index="/index/userInfo">
+    <el-icon>
+      <Basketball/>
+    </el-icon>
+    <span>个人设置</span>
+  </el-menu-item>
 
   <el-menu-item index="/index/user">
     <el-icon>
