@@ -8,14 +8,14 @@
       </el-col>
 
       <el-col :span="12">
-        <el-form-item label="登录密码" prop="password">
-          <el-input v-model="formUser.password" placeholder="请输入登录密码"/>
+        <el-form-item label="真实姓名" prop="realname">
+          <el-input v-model="formUser.realname" placeholder="请输入真实姓名"/>
         </el-form-item>
       </el-col>
 
       <el-col :span="12">
-        <el-form-item label="真实姓名" prop="realname">
-          <el-input v-model="formUser.realname" placeholder="请输入真实姓名"/>
+        <el-form-item label="联系电话" prop="phone">
+          <el-input v-model="formUser.phone" placeholder="请输入联系电话"/>
         </el-form-item>
       </el-col>
 
@@ -52,12 +52,18 @@
           </el-radio-group>
         </el-form-item>
       </el-col>
+
+      <el-col :span="24">
+        <el-form-item label="地址" prop="address">
+          <el-input type="textarea" v-model="formUser.address" placeholder="请输入地址"/>
+        </el-form-item>
+      </el-col>
     </el-row>
   </el-form>
 
   <div class="dialong__button--wrap">
     <el-button @click="close">取消</el-button>
-    <el-button color="#178557" type="success" @click="editUser" :loading="subLoading">保存</el-button>
+    <el-button color="#178557" type="success" @click="editUser(ruleFormRef)" :loading="subLoading">保存</el-button>
   </div>
 </template>
 
@@ -77,12 +83,13 @@ const emit = defineEmits(['closeEditUserForm', 'success'])
 const formUser = reactive({
   id: 0,
   username: '',
-  password: '',
   status: 1,
   realname: '',
   email: '',
   sex: '',
-  role: '1'
+  role: '1',
+  address:'',
+  phone:''
 })
 
 // 给表单填充数据
@@ -90,12 +97,14 @@ for (const key in formUser) {
   formUser[key] = userInfo.value[key]
 }
 
+const ruleFormRef = ref<FormInstance>()
+
 // 定义表单约束规则
 const rules = reactive<FormRules>({
   username: [{required: true, message: '用户名不能为空', trigger: 'blur'}],
-  password: [{required: true, message: '登录密码不能为空', trigger: 'blur'}],
   realname: [{required: true, message: '真实姓名不能为空', trigger: 'blur'}],
-  email: [{required: true, message: '邮箱不能为空', trigger: 'blur'}]
+  email: [{required: true, message: '邮箱不能为空', trigger: 'blur'}],
+  phone: [{required: true, message: '联系电话不能为空', trigger: 'blur'}],
 })
 
 // 编辑用户信息

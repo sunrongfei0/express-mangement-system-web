@@ -6,9 +6,6 @@
     </div>
 
     <div class="linkBox">
-      <div>
-        <el-icon size="30px" style="margin-right: 30px;margin-top: 5px; color:#d8d8d8;"><Bell /></el-icon>
-      </div>
       <!-- 登录信息 start -->
       <el-popover :width="300">
         <!-- 头像 start-->

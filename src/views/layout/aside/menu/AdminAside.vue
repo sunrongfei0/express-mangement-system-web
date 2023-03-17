@@ -8,31 +8,20 @@
 
 
   <el-menu-item index="/index/userInfo">
-    <el-icon>
-      <Basketball/>
-    </el-icon>
+    <el-icon><Avatar /></el-icon>
     <span>个人设置</span>
   </el-menu-item>
 
   <el-menu-item index="/index/user">
-    <el-icon>
-      <Basketball/>
-    </el-icon>
+    <el-icon><Briefcase /></el-icon>
     <span>用户管理</span>
   </el-menu-item>
 
   <el-menu-item index="/index/announcement">
     <el-icon>
-      <Basketball/>
+      <Microphone/>
     </el-icon>
     <span>公告管理</span>
-  </el-menu-item>
-
-  <el-menu-item index="--">
-    <el-icon>
-      <Basketball/>
-    </el-icon>
-    <span>反馈管理</span>
   </el-menu-item>
 </template>
 

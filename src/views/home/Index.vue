@@ -3,78 +3,29 @@
     <!-- 顶部背景图和内容 start -->
     <div class="top_bg">
       <h1>好好学习，天天向上</h1>
-      <p>校园快递管理系统,欢迎您,admin</p>
+      <p>校园快递管理系统,欢迎您,「{{userInfo.realname}}」</p>
     </div>
     <!-- 顶部背景图和内容 end -->
     <!-- 本站数据统计 start -->
     <div style="margin-bottom: 15px;color: #144b9f;">
       <div style="width: 12px;height: 12px;background-color:#f9a332;border-radius: 50%;
             float: left;margin-top: 5px;margin-right: 8px;"></div>
-      本站数据统计
+      更多功能敬请期待...
     </div>
-    <el-row :gutter="40" class="data_row">
-      <el-col :span="6">
-        <div style="background:linear-gradient(to right,#6d80fe,#23d2fd);">
-          <div class="data_left">
-            <el-icon>
-              <Avatar/>
-            </el-icon>
-          </div>
-          <div class="data_right">
-            <h1>45<span>人</span></h1>
-            <p>人数</p>
-          </div>
-        </div>
-      </el-col>
 
-      <el-col :span="6">
-        <div style="background:linear-gradient(to right,#6d80fe,#23d2fd);">
-          <div class="data_left">
-            <el-icon>
-              <Avatar/>
-            </el-icon>
-          </div>
-          <div class="data_right">
-            <h1>45<span>人</span></h1>
-            <p>人数</p>
-          </div>
-        </div>
-      </el-col>
-
-      <el-col :span="6">
-        <div style="background:linear-gradient(to right,#6d80fe,#23d2fd);">
-          <div class="data_left">
-            <el-icon>
-              <Avatar/>
-            </el-icon>
-          </div>
-          <div class="data_right">
-            <h1>45<span>人</span></h1>
-            <p>人数</p>
-          </div>
-        </div>
-      </el-col>
-
-      <el-col :span="6">
-        <div style="background:linear-gradient(to right,#6d80fe,#23d2fd);">
-          <div class="data_left">
-            <el-icon>
-              <Avatar/>
-            </el-icon>
-          </div>
-          <div class="data_right">
-            <h1>45<span>人</span></h1>
-            <p>人数</p>
-          </div>
-        </div>
-      </el-col>
-    </el-row>
+<!--      <el-carousel :interval="3000" type="card" height="600px">-->
+<!--        <el-carousel-item v-for="item in 6" :key="item">-->
+<!--          <h3 text="2xl" justify="center">{{ item }}</h3>-->
+<!--        </el-carousel-item>-->
+<!--      </el-carousel>-->
     <!-- 本站数据统计 end -->
   </div>
 </template>
 
 <script setup lang="ts">
+import {useUserStore} from "../../store/modules/user";
 
+const {userInfo} = useUserStore();
 </script>
 
 <style scoped>
@@ -152,4 +103,22 @@
   font-weight: 600;
   margin-left: 3px;
 }
+
+
+.el-carousel__item h3 {
+  color: #475669;
+  opacity: 0.75;
+  line-height: 200px;
+  margin: 0;
+  text-align: center;
+}
+
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #d3dce6;
+}
+
 </style>

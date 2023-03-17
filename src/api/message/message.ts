@@ -15,3 +15,10 @@ export function getDetailApi(id: number) {
         method: 'get'
     })
 }
+
+export function showMessageApi() {
+    return request({
+        url: 'message/show',
+        method: 'get'
+    })
+}

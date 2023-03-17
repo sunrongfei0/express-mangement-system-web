@@ -111,15 +111,23 @@
           </template>
         </el-table-column>
 
+        <el-table-column label="最后一次登录时间">
+          <template #default="scope">
+            <el-tooltip :content="scope.row.lastlogintime" placement="top" effect="light">
+              <span class="highlight">{{ formatTime(scope.row.lastlogintime, 'yyyy-MM-dd HH:mm:ss') }}</span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+
         <el-table-column label="操作">
           <template #default="scope">
-<!--            <el-button size="small" @click="editUser(scope.row.id)">编辑</el-button>-->
+            <el-button type="primary" @click="editUser(scope.row.id)">编辑</el-button>
             <el-popconfirm confirm-button-text="确定" cancel-button-text="取消" :icon="Delete"
                            icon-color="#626AEF"
                            :title="'确定删除用户名为「'+scope.row.username+'」的用户吗?'"
                            @confirm="delUser(scope.row.id)">
               <template #reference>
-                <el-button size="small" type="danger" style="margin-bottom: 10px">删除</el-button>
+                <el-button type="danger">删除</el-button>
               </template>
             </el-popconfirm>
           </template>

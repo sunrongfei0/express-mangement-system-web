@@ -9,7 +9,7 @@
 
   <el-menu-item index="/index/userInfo">
     <el-icon>
-      <Basketball/>
+      <Avatar/>
     </el-icon>
     <span>个人设置</span>
   </el-menu-item>
@@ -23,21 +23,21 @@
 
   <el-menu-item index="/index/helpget">
     <el-icon>
-      <Basketball/>
+      <Rank/>
     </el-icon>
     <span>快递广场</span>
   </el-menu-item>
 
   <el-menu-item index="/index/expresscenter">
     <el-icon>
-      <Basketball/>
+      <SetUp/>
     </el-icon>
     <span>关联快递中心</span>
   </el-menu-item>
 
   <el-menu-item index="/index/send">
     <el-icon>
-      <Basketball/>
+      <Promotion/>
     </el-icon>
     <span>寄件服务</span>
   </el-menu-item>
@@ -51,7 +51,7 @@
 
   <el-menu-item index="/index/message">
     <el-icon>
-      <Basketball/>
+      <BellFilled/>
     </el-icon>
     <span>消息查看</span>
   </el-menu-item>

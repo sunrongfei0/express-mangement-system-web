@@ -24,6 +24,23 @@
       </el-container>
     </el-container>
   </div>
+
+  <!-- 新增快递信息弹出框 start -->
+  <el-dialog align-center v-model="editMsgDialogFormVisible" width="42%" destroy-on-close>
+    <template #header="{close,titleId,titleClass}">
+      <div class="my-header">
+        <el-icon size="26px">
+          <EditPen/>
+        </el-icon>
+        <h1 id="titleId">来自：「{{ editTitle }}」的消息</h1>
+      </div>
+    </template>
+    <!-- 编写快递组件start  和新增页共用组件 -->
+    <MessageDetail :msgInfo="msgInfo"/>
+    <!-- 编写快递组件end -->
+
+  </el-dialog>
+  <!-- 新增快递信息弹出框 end -->
 </template>
 
 <script setup lang="ts">
@@ -33,8 +50,24 @@ import AsideMenu from './aside/Index.vue'
 import TopBar from "./header/TopBar.vue"
 import {onMounted, onUnmounted, ref} from "vue";
 import {validateTokenApi} from "../../api/login/login";
+import {showMessageApi} from "../../api/message/message";
+import MessageDetail from "../message/MessageDetail.vue";
 
 const timer = ref()
+
+// 定义表单标题
+let editTitle = "";
+const editMsgDialogFormVisible = ref(false);
+const msgInfo = ref()
+const showMessage = async () => {
+  const {data} = await showMessageApi()
+  if (data.status === 200) {
+    msgInfo.value = data.result
+    editTitle = msgInfo.value.sender;
+    editMsgDialogFormVisible.value = true;
+  }
+}
+
 // 组件加载时创建定时器
 onMounted(async () => {
   console.log("定时器创建...")
@@ -43,6 +76,7 @@ onMounted(async () => {
     // 返回登录页
     window.location.href = "/";
   }
+  await showMessage();
   timer.value = setInterval(async () => {
     console.log("定时器执行一次...")
     const {data} = await validateTokenApi()

@@ -8,22 +8,20 @@
 
 
   <el-menu-item index="/index/userInfo">
-    <el-icon>
-      <Basketball/>
-    </el-icon>
+    <el-icon><Avatar /></el-icon>
     <span>个人设置</span>
   </el-menu-item>
 
   <el-menu-item index="/index/addexpress">
     <el-icon>
-      <Basketball/>
+      <CirclePlus/>
     </el-icon>
     <span>新增快递</span>
   </el-menu-item>
 
   <el-menu-item index="/index/expresslist">
     <el-icon>
-      <Basketball/>
+      <DocumentCopy/>
     </el-icon>
     <span>快递列表</span>
   </el-menu-item>
@@ -31,14 +29,14 @@
 
   <el-menu-item index="/index/expresscenter">
     <el-icon>
-      <Basketball/>
+      <SetUp/>
     </el-icon>
     <span>关联快递中心</span>
   </el-menu-item>
 
   <el-menu-item index="/index/message">
     <el-icon>
-      <Basketball/>
+      <BellFilled/>
     </el-icon>
     <span>消息查看</span>
   </el-menu-item>

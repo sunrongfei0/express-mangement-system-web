@@ -87,7 +87,7 @@
         <el-table-column label="进度">
           <template #default="scope">
             <el-tooltip :content="scope.row.progress" placement="top" effect="light">
-              <el-progress :percentage="scope.row.progress" :color="customColorMethod" />
+              <el-progress :percentage="scope.row.progress" :color="customColorMethod"/>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -95,7 +95,14 @@
 
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button type="success" @click="">更新</el-button>
+            <el-popconfirm confirm-button-text="确定" cancel-button-text="取消" :icon="Delete"
+                           icon-color="#626AEF"
+                           :title="'确定更新运单号为「'+scope.row.expressno+'」的快递吗?'"
+                           @confirm="update(scope.row.expressno)">
+              <template #reference>
+                <el-button type="success">更新</el-button>
+              </template>
+            </el-popconfirm>
             <el-button type="primary" @click="getDetail(scope.row.expressno)">查看详情</el-button>
           </template>
         </el-table-column>
@@ -145,7 +152,7 @@ import {reactive, toRefs, onMounted, watch, ref} from "vue";
 import {formatTime} from "../../utils/date";
 import {ElMessage} from "element-plus";
 import {useUserStore} from "../../store/modules/user";
-import {getTrackApi, getTrackListApi} from "../../api/track/track";
+import {getTrackApi, getTrackListApi, updateApi} from "../../api/track/track";
 import TrackDetail from "./TrackDetail.vue";
 
 const state = reactive({
@@ -199,6 +206,19 @@ const search = () => {
       type: 'success',
       message: `单号“${state.searchValue}”搜索内容如下`,
     })
+    loadData(state)
+  }
+}
+
+const update = async (expressno: string) => {
+  if (expressno !== null) {
+    const {data} = await getTrackApi(expressno)
+    if (data.status === 200) {
+      ElMessage.success(data.message)
+      loadData(state)
+    } else {
+      ElMessage.error(data.message)
+    }
     loadData(state)
   }
 }
@@ -294,7 +314,7 @@ const {tableData, pageIndex, pageSize, loading, total, role, searchValue} = toRe
 }
 
 /* dialog */
-.content-box{
+.content-box {
   line-height: 30px;
 }
 
