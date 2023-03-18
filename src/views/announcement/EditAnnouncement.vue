@@ -44,7 +44,7 @@ const formAnn = reactive({
   content: ''
 })
 
-if (annInfo.value.id !== 0) {
+if (annInfo.value.id) {
   // 给表单填充数据
   for (const key in formAnn) {
     formAnn[key] = annInfo.value[key]
@@ -63,7 +63,7 @@ const editAnn = async (formEl: FormInstance) => {
   await formEl.validate(async (valid, fields) => {
     subLoading.value = true
     if (valid) {
-      if (formAnn.id === null) {
+      if (!formAnn.id) {
         const {data} = await addAnnApi(formAnn)
         if (data.status === 200) {
           ElMessage.success(data.message)
